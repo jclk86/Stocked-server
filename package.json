@@ -8,9 +8,13 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "predeploy": "npm audit",
-    "deploy": "git push heroku master"
+    "deploy": "git push heroku master",
+    "debug": "ndb node app"
   },
   "keywords": [],
+  "engines": {
+    "node": "10.15.3"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

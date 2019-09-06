@@ -1,11 +1,11 @@
 const xss = require("xss");
 
 const InventoryService = {
-  getInventory(db) {
-    return db.from("stocked_items").select("*");
-  },
-  getUserId(db) {
-    return db.from("stocked_users").select("*");
+  getUserInventory(db, user_id) {
+    return db
+      .from("user_items")
+      .select("*")
+      .where("user_id", user_id);
   }
 };
 

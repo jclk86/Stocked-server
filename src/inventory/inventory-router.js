@@ -6,8 +6,9 @@ const bodyParser = express.json();
 // /api/inventory/:userId or /api/:userId/inventory
 
 // we need getUsers for this base route
-inventoryRouter.route("/").get((req, res, next) => {
-  InventoryService.getInventory(req.app.get("db")).then(items =>
+inventoryRouter.route("/:user_id").get((req, res, next) => {
+  const { user_id } = req.params;
+  InventoryService.getUserInventory(req.app.get("db"), user_id).then(items =>
     res.json(items)
   );
 });

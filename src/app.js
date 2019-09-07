@@ -4,6 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const { NODE_ENV } = require("./config");
 const inventoryRouter = require("./inventory/inventory-router");
+const tagsRouter = require("./tags/tags-router");
 
 const app = express();
 
@@ -17,11 +18,8 @@ app.use(
 app.use(helmet());
 app.use(cors());
 
-app.use("/api/inventory/", inventoryRouter);
-
-app.get("/", (req, res) => {
-  res.status(200).send("you got 200 status");
-});
+app.use("/api/inventory", inventoryRouter);
+// app.use("/api/inventory/tags", tagsRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

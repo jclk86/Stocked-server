@@ -3,13 +3,34 @@ const xss = require("xss");
 const InventoryService = {
   getUserInventory(db, user_id) {
     return db
-      .from("user_items")
+      .from("stocked_tags")
       .select("*")
+      .from("user_items AS u")
+      .join("stocked_users AS su", "u.user_id", "=", "su.id")
+      .join("stocked_items AS si", "u.item_id", "=", "si.id")
+      .select(
+        "u.user_id",
+        "u.item_id",
+        "su.username",
+        "su.id",
+        "si.name",
+        "si.quantity",
+        "si.image_url",
+        "si.unit",
+        "si.cost",
+        "si.desc",
+        "si.date_modified"
+      )
       .where("user_id", user_id);
+  },
+  getTags(db) {
+    return db.from("stocked_tags").select("*");
   }
 };
 
 module.exports = InventoryService;
+
+// d
 
 // getUserId(db, userId) {
 //   return db("user_items").select("*").where

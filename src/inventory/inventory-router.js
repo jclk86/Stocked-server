@@ -13,6 +13,14 @@ inventoryRouter.route("/:user_id").get((req, res, next) => {
   );
 });
 
+// inventoryRouter.route("/:user_id").get((req, res, next) => {
+//   const { user_id } = req.params;
+//   InventoryService.getTags(req.app.get("db")).then(tags => res.json(tags));
+// });
+// inventoryRouter.route("/:user_id/tags/:tag_id").get((req,res,next) => {
+//   const { user_id, tag_id } = req.params;
+//   InventoryService.getUserInventory(req.)
+// })
 // for each route return the data you need
 
 module.exports = inventoryRouter;

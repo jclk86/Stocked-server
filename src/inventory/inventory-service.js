@@ -3,11 +3,10 @@ const xss = require("xss");
 const InventoryService = {
   getUserInventory(db, user_id) {
     return db
-      .from("stocked_tags")
-      .select("*")
       .from("user_items AS u")
       .join("stocked_users AS su", "u.user_id", "=", "su.id")
       .join("stocked_items AS si", "u.item_id", "=", "si.id")
+      .join("stocked_tags as st", "si.tag", "st.name")
       .select(
         "u.user_id",
         "u.item_id",
@@ -19,12 +18,10 @@ const InventoryService = {
         "si.unit",
         "si.cost",
         "si.desc",
-        "si.date_modified"
+        "si.date_modified",
+        "st.name"
       )
       .where("user_id", user_id);
-  },
-  getTags(db) {
-    return db.from("stocked_tags").select("*");
   }
 };
 

@@ -13,6 +13,11 @@ inventoryRouter.route("/:user_id").get((req, res, next) => {
   );
 });
 
+inventoryRouter.route("/:user_id/:item_id").get((req, res, next) => {
+  const { item_id, user_id } = req.params;
+  InventoryService.getByUserIdAndItemId(req.app.get("db"), user_id, item_id).then(item => res.json(item))
+ })
+
 // inventoryRouter.route("/:user_id").get((req, res, next) => {
 //   const { user_id } = req.params;
 //   InventoryService.getTags(req.app.get("db")).then(tags => res.json(tags));

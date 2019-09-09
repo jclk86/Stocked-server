@@ -1,17 +1,16 @@
 const xss = require("xss");
+// the tables are wrong. no need for user-items. It's not a many to many relationsip, but 1 to many. so each item should have a user id
 
 const InventoryService = {
   getUserInventory(db, user_id) {
     return db
-      .from("user_items AS u")
-      .join("stocked_users AS su", "u.user_id", "=", "su.id")
-      .join("stocked_items AS si", "u.item_id", "=", "si.id")
-      .join("stocked_tags as st", "si.tag", "st.name")
+      .from("stocked_users as su")
+      .join("stocked_items as si", "su.id", "=", "si.user_id")
+      .join("stocked_tags as st", "si.tag", "=", "st.name")
       .select(
-        "u.user_id",
-        "u.item_id",
         "su.username",
         "su.id",
+        "si.item_id",
         "si.name",
         "si.quantity",
         "si.image_url",
@@ -21,53 +20,55 @@ const InventoryService = {
         "si.date_modified",
         "st.name"
       )
-      .where("user_id", user_id);
+      .where("si.user_id", user_id);
   },
   getByUserIdAndItemId(db, user_id, item_id) {
     // return db.from("stocked_items").select("*").where("id", id).first();
     //not sure if you actually need to get userId with all of this, when likely, the db you fetched only includes the user's inventory anyways.
     return db
-    .from("user_items AS u")
-    .join("stocked_users AS su", "u.user_id", "=", "su.id")
-    .join("stocked_items AS si", "u.item_id", "=", "si.id")
-    .join("stocked_tags as st", "si.tag", "st.name")
-    .select(
-      "u.user_id",
-      "u.item_id",
-      "su.username",
-      "su.id",
-      "si.name",
-      "si.quantity",
-      "si.image_url",
-      "si.unit",
-      "si.cost",
-      "si.desc",
-      "si.date_modified",
-      "st.name"
-    )
-    .where("u.item_id", item_id)
-    .andWhere("u.user_id", user_id);
+      .from("stocked_users as su")
+      .join("stocked_items as si", "su.id", "=", "si.user_id")
+      .join("stocked_tags as st", "si.tag", "=", "st.name")
+      .select(
+        "su.username",
+        "su.id",
+        "si.item_id",
+        "si.name",
+        "si.quantity",
+        "si.image_url",
+        "si.unit",
+        "si.cost",
+        "si.desc",
+        "si.date_modified",
+        "st.name"
+      )
+      .where("si.item_id", item_id)
+      .andWhere("su.id", user_id);
   },
-  // Note: you may pmay not need to incorporate the userId for this. 
-  updateItem(db, id, newItemFields) {
-    return db.from("stocked_items")
-    .where({id})
-    .update(newItemFields);
+  // Note: you may pmay not need to incorporate the userId for this.
+  updateItem(db, item_id, newItemFields) {
+    return db
+      .from("stocked_items")
+      .where({ item_id })
+      .update(newItemFields);
   },
-  deleteItem(db, id) {
-    return db.from({id}).del();
+  deleteItem(db, item_id) {
+    return db.from({ item_id }).del();
   },
   insertItem(db, newItem) {
-    return db.insert(newItem).into("stocked_items").returning("*")
-    .then(rows => {
-      return rows[0]
-    });
+    return db
+      .insert(newItem)
+      .into("stocked_items") // need 2 tables here ...
+      .returning("*")
+      .then(rows => {
+        return rows[0];
+      });
   },
-  // make sure this is actually accepting an object or if it needs to 
-  // also, keep an eye on the "desc" if it needs the quotations or not 
+  // make sure this is actually accepting an object or if it needs to
+  // also, keep an eye on the "desc" if it needs the quotations or not
   serializeItem(item) {
     return {
-      id: item.id,
+      item_id: item.item_id,
       name: item.name,
       desc: item.desc,
       image_url: item.image_url,
@@ -76,9 +77,8 @@ const InventoryService = {
       date_modified: item.date_modified,
       unit: item.unit,
       tag: item.tag
-    }
+    };
   }
-  
 };
 
 module.exports = InventoryService;

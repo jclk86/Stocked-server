@@ -43,14 +43,17 @@ inventoryRouter
     });
   });
 
-inventoryRouter.route("/:user_id/:item_id").get((req, res, next) => {
-  const { item_id, user_id } = req.params;
-  InventoryService.getByUserIdAndItemId(
-    req.app.get("db"),
-    user_id,
-    item_id
-  ).then(item => res.json(item));
-});
+inventoryRouter
+  .route("/:user_id/:item_id")
+  .all((req, res, next) => {
+    const { item_id, user_id } = req.params;
+    InventoryService.getByUserIdAndItemId(
+      req.app.get("db"),
+      user_id,
+      item_id
+    ).then(item => res.json(item));
+  })
+  .patch();
 
 // inventoryRouter.route("/:user_id").get((req, res, next) => {
 //   const { user_id } = req.params;

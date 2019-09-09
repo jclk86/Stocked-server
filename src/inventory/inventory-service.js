@@ -25,25 +25,26 @@ const InventoryService = {
   getByUserIdAndItemId(db, user_id, item_id) {
     // return db.from("stocked_items").select("*").where("id", id).first();
     //not sure if you actually need to get userId with all of this, when likely, the db you fetched only includes the user's inventory anyways.
-    return db
-      .from("stocked_users as su")
-      .join("stocked_items as si", "su.id", "=", "si.user_id")
-      .join("stocked_tags as st", "si.tag", "=", "st.name")
-      .select(
-        "su.username",
-        "su.id",
-        "si.item_id",
-        "si.name",
-        "si.quantity",
-        "si.image_url",
-        "si.unit",
-        "si.cost",
-        "si.desc",
-        "si.date_modified",
-        "st.name"
-      )
-      .where("si.item_id", item_id)
-      .andWhere("su.id", user_id);
+    return (
+      db
+        .from("stocked_items as si")
+        // .join("stocked_items as si", "su.id", "=", "si.user_id")
+        // .join("stocked_tags as st", "si.tag", "=", "st.name")
+        .select(
+          "si.user_id",
+          "si.item_id",
+          "si.name",
+          "si.quantity",
+          "si.image_url",
+          "si.unit",
+          "si.cost",
+          "si.desc",
+          "si.date_modified",
+          "si.tag"
+        )
+        .where("si.item_id", item_id)
+        .andWhere("si.user_id", user_id)
+    );
   },
   // Note: you may pmay not need to incorporate the userId for this.
   updateItem(db, item_id, newItemFields) {

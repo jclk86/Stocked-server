@@ -2,14 +2,14 @@ BEGIN;
 
 TRUNCATE stocked_users, stocked_tags, stocked_items RESTART IDENTITY CASCADE;
 
-INSERT INTO stocked_users (username, fullname, password, email)
+INSERT INTO stocked_users (username, fullname, "password", email)
 VALUES
   ('Pip123', 'Bob Smith', 'Password123', 'BSmith@gmail.com'),
   ('Cow_Moo', 'Sally Sue', 'p4assWord321', 'SallyS@gmail.com'),
   ('Manager1', 'Jack Wag', 'passW3rd', 'JWag@gmail.com');
 
 
-INSERT INTO stocked_tags(name)
+INSERT INTO stocked_tags("name")
 VALUES
   ('proteins'),
   ('beverages'),
@@ -22,7 +22,7 @@ VALUES
   ('grains');
 
 
-INSERT INTO stocked_items(name, "desc", image_url, quantity, cost, unit, tag, user_id)
+INSERT INTO stocked_items("name", "desc", image_url, quantity, cost_per_unit, unit, tag, user_id)
 VALUES
   ('Steaks', '60-day dry-aged', 'https://images.pexels.com/photos/1539684/pexels-photo-1539684.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', 10, 34.99, 'amt','proteins', 1),
   ('Apples', 'red delicious apples for pies', 'https://images.pexels.com/photos/39803/pexels-photo-39803.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', 40, 1.99, 'lbs', 'fruits', 1),

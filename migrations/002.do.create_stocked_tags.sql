@@ -1,4 +1,4 @@
 CREATE TABLE stocked_tags (
-  name TEXT PRIMARY KEY NOT NULL
+  "name" TEXT PRIMARY KEY NOT NULL
 );
 

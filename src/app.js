@@ -18,8 +18,8 @@ app.use(
 app.use(helmet());
 app.use(cors());
 
-app.use("/api/inventory/user", inventoryRouter);
-app.use("/api/inventory/tags", tagsRouter);
+app.use("/api/user", inventoryRouter); // /:user_id/inventory/item_id
+app.use("/api/tags", tagsRouter); // /:tag_id/inventory/:item_id
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

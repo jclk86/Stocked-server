@@ -9,7 +9,7 @@ inventoryRouter
   .get((req, res, next) => {
     const { user_id } = req.params;
     InventoryService.getUserInventory(req.app.get("db"), user_id)
-      .then(items => res.json(items)) // .map with serialize
+      .then(items => res.json(items.map(InventoryService.serializeItem))) // .map with serialize
       .catch(next);
   })
   .post(bodyParser, (req, res, next) => {
@@ -58,7 +58,7 @@ inventoryRouter
       req.app.get("db"),
       user_id,
       item_id
-    ).then(item => res.json(item));
+    ).then(item => res.json(item)); // serialize this
   })
   .delete((req, res, next) => {
     const { item_id, user_id } = req.params;

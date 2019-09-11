@@ -32,7 +32,7 @@ inventoryRouter
       cost_per_unit,
       unit,
       tag,
-      date_modified: new Date()
+      date_modified: new Date() // DB generates date. Remove this.
     };
     for (const [key, value] of Object.entries(newItem))
       if (value == null) {

@@ -3,12 +3,9 @@ const xss = require("xss");
 const InventoryService = {
   getUserInventory(db, user_id) {
     return db
-      .from("stocked_users as su")
-      .join("stocked_items as si", "su.id", "=", "si.user_id")
-      .join("stocked_tags as st", "si.tag", "=", "st.name")
+      .from("stocked_items as si")
       .select(
-        "su.username",
-        "su.id",
+        "si.user_id",
         "si.item_id",
         "si.name",
         "si.quantity",
@@ -81,7 +78,7 @@ const InventoryService = {
       quantity: item.quantity,
       cost_per_unit: item.cost_per_unit,
       date_modified: item.date_modified,
-      unit: item.unit,
+      unit: xss(item.unit),
       tag: item.tag
     };
   }

@@ -5,11 +5,11 @@ const TagsService = {
   getAllTags(db) {
     return db.from("stocked_tags").select("*");
   },
-  getByName(db, name) {
+  getByName(db, tag_name) {
     return db
-      .from("stocked_tags")
+      .from("stocked_tags as st")
       .select("*")
-      .where("name", name)
+      .where("st.name", tag_name)
       .first();
   }
 };

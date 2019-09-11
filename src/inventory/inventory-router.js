@@ -9,7 +9,7 @@ inventoryRouter
   .get((req, res, next) => {
     const { user_id } = req.params;
     InventoryService.getUserInventory(req.app.get("db"), user_id)
-      .then(items => res.json(items.map(InventoryService.serializeItem))) // .map with serialize
+      .then(items => res.json(items.map(InventoryService.serializeItem)))
       .catch(next);
   })
   .post(bodyParser, (req, res, next) => {
@@ -58,7 +58,7 @@ inventoryRouter
       req.app.get("db"),
       user_id,
       item_id
-    ).then(item => res.json(item)); // serialize this
+    ).then(item => res.json(item.map(InventoryService.serializeItem))); // serialize this
   })
   .delete((req, res, next) => {
     const { item_id, user_id } = req.params;
@@ -117,11 +117,11 @@ inventoryRouter
 
 async function checkUserExists(req, res, next) {
   try {
-    const user = InventoryService.getUserById(
+    const user = await InventoryService.getUserById(
       req.app.get("db"),
       req.params.user_id
     );
-    if (!user)
+    if (!user.length)
       return res.status(404).json({
         error: `User doesn't exist`
       });

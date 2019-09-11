@@ -42,7 +42,7 @@ const InventoryService = {
   },
 
   getUserById(db, user_id) {
-    return db.from("stocked_users").where({ user_id });
+    return db.from("stocked_users as su").where("su.id", user_id);
   },
 
   updateItem(db, item_id, user_id, newItemFields) {

@@ -22,7 +22,7 @@ usersRouter.post("/", bodyParser, (req, res, next) => {
     .then(hashedPassword => {
       const newUser = {
         username,
-        password,
+        password: hashedPassword,
         fullname,
         email,
         date_created: "now()"

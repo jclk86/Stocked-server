@@ -5,6 +5,8 @@ const helmet = require("helmet");
 const { NODE_ENV } = require("./config");
 const inventoryRouter = require("./inventory/inventory-router");
 const tagsRouter = require("./tags/tags-router");
+const usersRouter = require("./users/users-router");
+const authRouter = require("./auth/auth-router");
 
 const app = express();
 
@@ -18,8 +20,10 @@ app.use(
 app.use(helmet());
 app.use(cors());
 
-app.use("/api/user", inventoryRouter); // /:user_id/inventory/item_id
-app.use("/api/tags", tagsRouter); // /:tag_id/inventory/:item_id
+app.use("/api/user", inventoryRouter);
+app.use("/api/tags", tagsRouter);
+app.use("/api/register", usersRouter); // this endpoint is users, not user. Make sure you find out if they can share.
+app.use("/api/auth", authRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

@@ -4,9 +4,9 @@ TRUNCATE stocked_users, stocked_tags, stocked_items RESTART IDENTITY CASCADE;
 
 INSERT INTO stocked_users (username, fullname, "password", email)
 VALUES
-  ('Pip123', 'Bob Smith', 'Password123', 'BSmith@gmail.com'),
-  ('Cow_Moo', 'Sally Sue', 'p4assWord321', 'SallyS@gmail.com'),
-  ('Manager1', 'Jack Wag', 'passW3rd', 'JWag@gmail.com');
+  ('Pip123', 'Bob Smith', '$2a$12$D4.IrSWGkcMCbbzSJ0KfIOT5sdAPH4ssgs9MpuesfgIwHlVJXMriG', 'BSmith@gmail.com'),
+  ('Cow_Moo', 'Sally Sue', '$2a$12$j0kP69qBqyetvE9NIuNzG.2ScRBydc1FhT5iGWIiBMN9LIkD9mgqe', 'SallyS@gmail.com'),
+  ('Manager1', 'Jack Wag', '$2a$12$dfTM0zGYg2b4gG6.21C1oeriE1/POMhzt3cY28mE4yYcldNDfWObS', 'JWag@gmail.com');
 
 
 INSERT INTO stocked_tags("name")

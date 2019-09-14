@@ -32,7 +32,7 @@ const UsersService = {
     }
     return null;
   },
-  hashPassword(user) {
+  hashPassword(password) {
     return bcrypt.hash(password, 12);
   },
   serializeUser(user) {
@@ -41,6 +41,7 @@ const UsersService = {
       fullname: xss(user.fullname),
       username: xss(user.username),
       email: xss(user.email),
+      password: xss(user.password),
       date_created: new Date(user.date_created)
     };
   }

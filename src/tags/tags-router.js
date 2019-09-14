@@ -17,6 +17,4 @@ tagsRouter.route("/:tag_name/inventory").get((req, res, next) => {
   });
 });
 
-// Try filtering in react before building routes
-
 module.exports = tagsRouter;

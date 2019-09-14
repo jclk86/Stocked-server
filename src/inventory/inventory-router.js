@@ -2,9 +2,11 @@ const express = require("express");
 const InventoryService = require("./inventory-service");
 const inventoryRouter = express.Router();
 const bodyParser = express.json();
+const { requireAuth } = require("../middleware/jwt-auth");
 
 inventoryRouter
   .route("/:user_id/inventory")
+  .all(requireAuth)
   .all(checkUserExists)
   .get((req, res, next) => {
     const { user_id } = req.params;
@@ -31,8 +33,7 @@ inventoryRouter
       desc,
       cost_per_unit,
       unit,
-      tag,
-      date_modified: new Date() // DB generates date. Remove this.
+      tag
     };
     for (const [key, value] of Object.entries(newItem))
       if (value == null) {
@@ -50,6 +51,7 @@ inventoryRouter
 
 inventoryRouter
   .route("/:user_id/inventory/:item_id")
+  .all(requireAuth)
   .all(checkUserExists)
   .all(checkUserItemExists)
   .get((req, res, next) => {

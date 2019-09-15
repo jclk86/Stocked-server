@@ -10,12 +10,18 @@ inventoryRouter
   .all(checkUserExists)
   .get((req, res, next) => {
     const { user_id } = req.params;
+    const { id } = req.user; // from the requireAuth, which appended a user object to req.
+    if (parseInt(user_id) !== id) {
+      return res.status(400).json({
+        error: `Unauthorized request`
+      });
+    }
     InventoryService.getUserInventory(req.app.get("db"), user_id)
       .then(items => res.json(items.map(InventoryService.serializeItem)))
       .catch(next);
   })
   .post(bodyParser, (req, res, next) => {
-    const { user_id } = req.params;
+    const { id } = req.user; // changed from params
     const {
       name,
       quantity,
@@ -27,7 +33,7 @@ inventoryRouter
     } = req.body;
     const newItem = {
       name,
-      user_id,
+      user_id: id, //changed
       quantity,
       image_url,
       desc,
@@ -55,16 +61,18 @@ inventoryRouter
   .all(checkUserExists)
   .all(checkUserItemExists)
   .get((req, res, next) => {
-    const { item_id, user_id } = req.params;
+    const { item_id } = req.params;
+    const { id } = req.user; //changed from params
     InventoryService.getByUserIdAndItemId(
       req.app.get("db"),
-      user_id,
+      id, //
       item_id
     ).then(item => res.json(item.map(InventoryService.serializeItem))); // serialize this
   })
   .delete((req, res, next) => {
-    const { item_id, user_id } = req.params;
-    InventoryService.deleteItem(req.app.get("db"), item_id, user_id)
+    const { item_id } = req.params;
+    const { id } = req.user;
+    InventoryService.deleteItem(req.app.get("db"), item_id, id)
       .then(numRowsAffected => {
         res.status(204).end();
       })
@@ -73,7 +81,7 @@ inventoryRouter
   .patch(bodyParser, (req, res, next) => {
     const {
       item_id,
-      user_id,
+      id, // changed
       name,
       quantity,
       image_url,
@@ -85,7 +93,7 @@ inventoryRouter
 
     const itemToUpdate = {
       item_id,
-      user_id,
+      user_id: id, // change
       name,
       quantity,
       image_url,
@@ -108,7 +116,7 @@ inventoryRouter
     InventoryService.updateItem(
       req.app.get("db"),
       req.params.item_id,
-      req.params.user_id,
+      req.user.id, // changed
       itemToUpdate
     )
       .then(numOfRowsAffected => {
@@ -121,7 +129,7 @@ async function checkUserExists(req, res, next) {
   try {
     const user = await InventoryService.getUserById(
       req.app.get("db"),
-      req.params.user_id
+      req.user.id // changed
     );
     if (!user.length)
       return res.status(404).json({

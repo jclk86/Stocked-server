@@ -33,7 +33,6 @@ usersRouter.post("/", bodyParser, (req, res, next) => {
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${user.id}/inventory`))
           .json(UsersService.serializeUser(user));
-        console.log(user);
       });
     })
     .catch(next);

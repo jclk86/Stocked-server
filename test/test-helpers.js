@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 function makeUsersArray() {
   return [
     {
-      id: 1,
       username: "test-user-1",
       fullname: "Test user 1",
       email: "test@gmail.com",
@@ -12,7 +11,6 @@ function makeUsersArray() {
       date_created: new Date("2029-01-22T16:28:32.615Z")
     },
     {
-      id: 2,
       username: "test-user-2",
       fullname: "Test user 2",
       email: "test2@gmail.com",
@@ -20,7 +18,6 @@ function makeUsersArray() {
       date_created: new Date("2029-01-22T16:28:32.615Z")
     },
     {
-      id: 3,
       username: "test-user-3",
       fullname: "Test user 3",
       email: "test3@gmail.com",
@@ -28,7 +25,6 @@ function makeUsersArray() {
       date_created: new Date("2029-01-22T16:28:32.615Z")
     },
     {
-      id: 4,
       username: "test-user-4",
       fullname: "Test user 4",
       email: "test4@gmail.com",
@@ -73,7 +69,6 @@ function makeTagsArray() {
 function makeInventoryArray(users) {
   return [
     {
-      item_id: 1,
       user_id: users[0].id,
       name: "steak",
       desc: "this is steak",
@@ -86,7 +81,6 @@ function makeInventoryArray(users) {
       tag: "proteins"
     },
     {
-      item_id: 2,
       user_id: users[0].id,
       name: "Milk",
       desc: "this is milk",
@@ -99,7 +93,6 @@ function makeInventoryArray(users) {
       tag: "dairy"
     },
     {
-      item_id: 3,
       user_id: users[0].id,
       name: "bread",
       desc: "this is bread",
@@ -112,7 +105,6 @@ function makeInventoryArray(users) {
       tag: "grains"
     },
     {
-      item_id: 4,
       user_id: users[1].id,
       name: "forks",
       desc: "these are forks",
@@ -125,7 +117,6 @@ function makeInventoryArray(users) {
       tag: "utensils"
     },
     {
-      item_id: 5,
       user_id: users[1].id,
       name: "ketchup",
       desc: "this is ketchup",
@@ -138,7 +129,6 @@ function makeInventoryArray(users) {
       tag: "condiments"
     },
     {
-      item_id: 6,
       user_id: users[1].id,
       name: "apples",
       desc: "these are apples",
@@ -151,7 +141,6 @@ function makeInventoryArray(users) {
       tag: "fruits"
     },
     {
-      item_id: 7,
       user_id: users[2].id,
       name: "noodles",
       desc: "these are noodles",
@@ -164,7 +153,6 @@ function makeInventoryArray(users) {
       tag: "grains"
     },
     {
-      item_id: 8,
       user_id: users[2].id,
       name: "plates",
       desc: "these are plates",
@@ -177,7 +165,6 @@ function makeInventoryArray(users) {
       tag: "dishware"
     },
     {
-      item_id: 9,
       user_id: users[2].id,
       name: "chocolate",
       desc: "this is chocolate",
@@ -211,7 +198,8 @@ function makeExpectedInventory(users, items) {
 function makeInventoryFixtures() {
   const testUsers = makeUsersArray();
   const testInventory = makeInventoryArray(testUsers);
-  return { testUsers, testInventory };
+  const testTags = makeTagsArray();
+  return { testUsers, testInventory, testTags };
 }
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
@@ -222,47 +210,24 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   return `Bearer ${token}`;
 }
 
-function cleanTables(db) {
-  return db.transaction(trx =>
-    trx
-      .raw(
-        `TRUNCATE 
-        stocked_users,
-        stocked_tags,
-        stocked_items
-      `
-      )
-      .then(() =>
-        Promise.all([
-          trx.raw(
-            `ALTER SEQUENCE stocked_users_id_seq minvalue 0 START WITH 1`
-          ),
-          trx.raw(
-            `ALTER SEQUENCE stocked_items_id_seq minvalue 0 START WITH 1`
-          ),
-          trx.raw(`SELECT setval('stocked_users_id_seq', 0)`),
-          trx.raw(`SELECT setval('stocked_items_id_seq', 0)`)
-        ])
-      )
-  );
-}
 function seedUsers(db, users) {
   const preppedUsers = users.map(user => ({
     ...user,
     password: bcrypt.hashSync(user.password, 1)
   }));
-  return db
-    .into("stocked_users")
-    .insert(preppedUsers)
-    .then(() =>
-      db.raw(`SELECT setval('stocked_users_id_seq', ?)`, [
-        users[users.length - 1].id
-      ])
-    );
+  return db.into("stocked_users").insert(preppedUsers);
 }
 
-function seedStockedItemsTable(db, items = []) {
+function seedTags(db, tags) {
+  const preppedTags = tags.map(tag => ({
+    ...tag
+  }));
+  return db.into("stocked_tags").insert(preppedTags);
+}
+
+function seedItemsTable(db, items = [], users, tags) {
   return db.transaction(async trx => {
+    await seedTags(trx, tags);
     await seedUsers(trx, users);
     await trx.into("stocked_items").insert(items);
     await trx.raw(`SELECT setval('stocked_items_id_seq', ?)`, [
@@ -272,13 +237,13 @@ function seedStockedItemsTable(db, items = []) {
 }
 
 module.exports = {
+  seedTags,
   seedUsers,
-  cleanTables,
   makeUsersArray,
   makeTagsArray,
   makeInventoryFixtures,
   makeExpectedInventory,
   makeAuthHeader,
   makeInventoryArray,
-  seedStockedItemsTable
+  seedItemsTable
 };

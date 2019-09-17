@@ -10,11 +10,4 @@ tagsRouter.route("/").get((req, res, next) => {
     .catch(next);
 });
 
-tagsRouter.route("/:tag_name/inventory").get((req, res, next) => {
-  const { tag_name } = req.params;
-  TagsService.getByName(req.app.get("db"), tag_name).then(tag => {
-    res.json(tag);
-  });
-});
-
 module.exports = tagsRouter;

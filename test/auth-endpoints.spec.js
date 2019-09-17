@@ -42,10 +42,10 @@ describe(`Auth Endpoints`, function() {
           });
       });
 
-      it(`responds with "Incorrect username or password" when bad username or password`, () => {
+      it(`responds with "Incorrect username or password" when bad username `, () => {
         const userInvalidUser = {
           username: "NotAUser",
-          password: "Password123!"
+          password: testUser.password
         };
         return supertest(app)
           .post("/api/auth/login")
@@ -53,9 +53,9 @@ describe(`Auth Endpoints`, function() {
           .expect(400, { error: "Incorrect username or password" });
       });
 
-      it(`responds with "Incorrect username or password" when bad username or password`, () => {
+      it(`responds with "Incorrect username or password" when bad password`, () => {
         const userInvalidPass = {
-          username: "Pip123",
+          username: testUser.username,
           password: "incorrect"
         };
         return supertest(app)
@@ -66,8 +66,8 @@ describe(`Auth Endpoints`, function() {
 
       it("responds with 200 and JWT auth token using secret when valid credentials", () => {
         const userValidCreds = {
-          username: "Pip123",
-          password: "Password123!"
+          username: testUser.username,
+          password: testUser.password
         };
 
         const expectedToken = jwt.sign(
@@ -78,10 +78,7 @@ describe(`Auth Endpoints`, function() {
         return supertest(app)
           .post("/api/auth/login")
           .send(userValidCreds)
-          .expect(200, {
-            authToken: expectedToken,
-            id: testUser.id
-          });
+          .expect(200);
       });
     });
   });

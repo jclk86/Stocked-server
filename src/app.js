@@ -22,7 +22,7 @@ app.use(cors());
 
 app.use("/api/user", inventoryRouter);
 app.use("/api/tags", tagsRouter);
-app.use("/api/register", usersRouter); // this endpoint is users, not user. Make sure you find out if they can share.
+app.use("/api/register", usersRouter);
 app.use("/api/auth", authRouter);
 
 app.use(function errorHandler(error, req, res, next) {

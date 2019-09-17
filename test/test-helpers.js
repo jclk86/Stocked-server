@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 function makeUsersArray() {
   return [
     {
+      id: 1,
       username: "test-user-1",
       fullname: "Test user 1",
       email: "test@gmail.com",
@@ -11,6 +12,7 @@ function makeUsersArray() {
       date_created: new Date("2029-01-22T16:28:32.615Z")
     },
     {
+      id: 2,
       username: "test-user-2",
       fullname: "Test user 2",
       email: "test2@gmail.com",
@@ -18,6 +20,7 @@ function makeUsersArray() {
       date_created: new Date("2029-01-22T16:28:32.615Z")
     },
     {
+      id: 3,
       username: "test-user-3",
       fullname: "Test user 3",
       email: "test3@gmail.com",
@@ -25,6 +28,7 @@ function makeUsersArray() {
       date_created: new Date("2029-01-22T16:28:32.615Z")
     },
     {
+      id: 4,
       username: "test-user-4",
       fullname: "Test user 4",
       email: "test4@gmail.com",
@@ -70,6 +74,7 @@ function makeInventoryArray(users) {
   return [
     {
       user_id: users[0].id,
+      item_id: 1,
       name: "steak",
       desc: "this is steak",
       image_url:
@@ -82,6 +87,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[0].id,
+      item_id: 2,
       name: "Milk",
       desc: "this is milk",
       image_url:
@@ -94,6 +100,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[0].id,
+      item_id: 3,
       name: "bread",
       desc: "this is bread",
       image_url:
@@ -106,6 +113,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[1].id,
+      item_id: 4,
       name: "forks",
       desc: "these are forks",
       image_url:
@@ -118,6 +126,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[1].id,
+      item_id: 5,
       name: "ketchup",
       desc: "this is ketchup",
       image_url:
@@ -130,6 +139,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[1].id,
+      item_id: 6,
       name: "apples",
       desc: "these are apples",
       image_url:
@@ -142,6 +152,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[2].id,
+      item_id: 7,
       name: "noodles",
       desc: "these are noodles",
       image_url:
@@ -154,6 +165,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[2].id,
+      item_id: 8,
       name: "plates",
       desc: "these are plates",
       image_url:
@@ -166,6 +178,7 @@ function makeInventoryArray(users) {
     },
     {
       user_id: users[2].id,
+      item_id: 9,
       name: "chocolate",
       desc: "this is chocolate",
       image_url:

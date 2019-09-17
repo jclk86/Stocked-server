@@ -32,7 +32,6 @@ describe(`Inventory Endpoints`, function() {
   );
 
   describe("Unauthorized requests", () => {
-    const testUserId = testUsers[0].id;
     beforeEach("insert inventory", () => {
       return db.into("stocked_users").insert(testUsers);
     });
@@ -43,9 +42,43 @@ describe(`Inventory Endpoints`, function() {
       return db.into("stocked_items").insert(testInventory);
     });
     it(`responds 401 Unauthorized for GET /api/user/users_id/inventory`, () => {
+      const testUserId = testUsers[0].id;
       return supertest(app)
-        .get("/api/user/${testUserId}/inventory")
+        .get(`/api/user/${testUserId}/inventory`)
         .expect(401, { error: "Missing bearer token" });
+    });
+  });
+
+  describe(`PATCH /api/user/user_id/inventory/item_id`, () => {
+    beforeEach("insert inventory", () => {
+      return db.into("stocked_users").insert(testUsers);
+    });
+    beforeEach("stocked_tags", () => {
+      return db.into("stocked_tags").insert(testTags);
+    });
+    beforeEach("insert items", () => {
+      return db.into("stocked_items").insert(testInventory);
+    });
+
+    it(`updates an item, responding with updated item`, () => {
+      const testUser = testUsers[0];
+      const testItem = testInventory[0];
+      const updatedItem = { name: "title update" };
+      const expectedItem = {
+        ...testItem[testItem.item_id - 1],
+        ...updatedItem
+      };
+      return supertest(app)
+        .patch(`/api/user/${testUser.id}/inventory/${testItem.item_id}`)
+        .set("Authorization", helpers.makeAuthHeader(testUser))
+        .send(updatedItem)
+        .expect(204)
+        .then(res => {
+          supertest(app)
+            .get(`/api/user/${testUser.id}/inventory/${testItem.item_id}`)
+            .set("Authorization", helpers.makeAuthHeader(testUser))
+            .expect(expectedItem);
+        });
     });
   });
 
@@ -74,7 +107,7 @@ describe(`Inventory Endpoints`, function() {
         desc: "test desc"
       };
       return supertest(app)
-        .post("/api/user/${testUsers[0].id}/inventory")
+        .post("/api/user/${testUser.id}/inventory")
         .set("Authorization", helpers.makeAuthHeader(testUser))
         .send(newItem)
         .expect(201)

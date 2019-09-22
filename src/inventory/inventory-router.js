@@ -10,7 +10,7 @@ inventoryRouter
   .all(checkUserExists)
   .get((req, res, next) => {
     const { user_id } = req.params;
-    const { id } = req.user; // from the requireAuth, which appended a user object to req.
+    const { id } = req.user;
     if (parseInt(user_id) !== id) {
       return res.status(400).json({
         error: `Unauthorized request`
@@ -21,7 +21,7 @@ inventoryRouter
       .catch(next);
   })
   .post(bodyParser, (req, res, next) => {
-    const { id } = req.user; // changed from params
+    const { id } = req.user;
     const {
       name,
       quantity,
@@ -33,7 +33,7 @@ inventoryRouter
     } = req.body;
     const newItem = {
       name,
-      user_id: id, //changed
+      user_id: id,
       quantity,
       image_url,
       desc,
@@ -62,12 +62,10 @@ inventoryRouter
   .all(checkUserItemExists)
   .get((req, res, next) => {
     const { item_id } = req.params;
-    const { id } = req.user; //changed from params
-    InventoryService.getByUserIdAndItemId(
-      req.app.get("db"),
-      id, //
-      item_id
-    ).then(item => res.json(item.map(InventoryService.serializeItem))); // serialize this
+    const { id } = req.user;
+    InventoryService.getByUserIdAndItemId(req.app.get("db"), id, item_id).then(
+      item => res.json(item.map(InventoryService.serializeItem))
+    );
   })
   .delete((req, res, next) => {
     const { item_id } = req.params;
@@ -81,7 +79,7 @@ inventoryRouter
   .patch(bodyParser, (req, res, next) => {
     const {
       item_id,
-      id, // changed
+      id,
       name,
       quantity,
       image_url,
@@ -93,7 +91,7 @@ inventoryRouter
 
     const itemToUpdate = {
       item_id,
-      user_id: id, // change
+      user_id: id,
       name,
       quantity,
       image_url,
@@ -116,7 +114,7 @@ inventoryRouter
     InventoryService.updateItem(
       req.app.get("db"),
       req.params.item_id,
-      req.user.id, // changed
+      req.user.id,
       itemToUpdate
     )
       .then(numOfRowsAffected => {
@@ -129,7 +127,7 @@ async function checkUserExists(req, res, next) {
   try {
     const user = await InventoryService.getUserById(
       req.app.get("db"),
-      req.user.id // changed
+      req.user.id
     );
     if (!user.length)
       return res.status(404).json({

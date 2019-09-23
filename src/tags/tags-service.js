@@ -1,5 +1,3 @@
-const xss = require("xss");
-
 const TagsService = {
   getAllTags(db) {
     return db.from("stocked_tags").select("*");

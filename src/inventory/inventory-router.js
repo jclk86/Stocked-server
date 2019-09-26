@@ -107,7 +107,7 @@ inventoryRouter
     if (numOfValues === 0) {
       return res.status(400).jsonp({
         error: {
-          message: `Request body must contain either 'name,' 'quantity,' 'image_url,' 'desc,' 'cost_per_unit,' 'unit,' 'tag'`
+          message: `Request body must contain either 'name,' 'quantity,' 'cost_per_unit,' 'unit,' 'tag'`
         }
       });
     }

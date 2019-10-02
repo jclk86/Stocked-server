@@ -1,5 +1,5 @@
 BEGIN;
--- $2a$12$D4.IrSWGkcMCbbzSJ0KfIOT5sdAPH4ssgs9MpuesfgIwHlVJXMriG
+
 TRUNCATE stocked_users, stocked_tags, stocked_items RESTART IDENTITY CASCADE;
 
 INSERT INTO stocked_users (username, fullname, "password", email)

@@ -29,9 +29,9 @@ authRouter.post("/login", bodyParser, (req, res, next) => {
             error: "Incorrect username or password"
           });
         // user_id is sent in payload to be extracted and used in client.
-        const sub = dbUser.id;
-        // const userId = { id: dbUser.id };
-        const payload = { sub: sub };
+        const sub = dbUser.username;
+
+        const payload = { sub: dbUser.username, user_id: dbUser.id };
         res.send({
           authToken: AuthService.createJwt(sub, payload)
         });
@@ -42,7 +42,7 @@ authRouter.post("/login", bodyParser, (req, res, next) => {
 
 authRouter.post("/refresh", requireAuth, (req, res) => {
   const sub = req.user.username;
-  const payload = { user_id: req.user.id };
+  const payload = { sub: req.user.username, user_id: req.user.id };
   res.send({
     authToken: AuthService.createJwt(sub, payload)
   });

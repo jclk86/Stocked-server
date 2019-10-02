@@ -30,11 +30,11 @@ authRouter.post("/login", bodyParser, (req, res, next) => {
           });
         // user_id is sent in payload to be extracted and used in client.
         const sub = dbUser.username;
-        const userId = { id: dbUser.id };
+        // const userId = { id: dbUser.id };
         const payload = { id: dbUser.id };
         res.send({
-          authToken: AuthService.createJwt(sub, payload),
-          id: userId
+          authToken: AuthService.createJwt(sub, payload)
+          // id: userId
         });
       });
     })
@@ -43,7 +43,7 @@ authRouter.post("/login", bodyParser, (req, res, next) => {
 
 authRouter.post("/refresh", requireAuth, (req, res) => {
   const sub = req.user.username;
-  const payload = { user_id: req.user.id };
+  const payload = { id: req.user.id };
   res.send({
     authToken: AuthService.createJwt(sub, payload)
   });

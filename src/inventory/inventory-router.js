@@ -9,6 +9,7 @@ inventoryRouter
   .all(requireAuth)
   .all(checkUserExists)
   .get((req, res, next) => {
+    // provides request error if user changes user_id in url.
     const { user_id } = req.params;
     const { id } = req.user;
     if (parseInt(user_id) !== id) {

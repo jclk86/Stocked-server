@@ -14,7 +14,6 @@ const app = express();
 
 const morganOption = NODE_ENV === "production" ? "tiny" : "common";
 
-app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(
   morgan(morganOption, {
     skip: () => NODE_ENV === "test"
@@ -22,7 +21,7 @@ app.use(
 );
 app.use(helmet());
 app.use(cors());
-
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use("/api/user", inventoryRouter);
 app.use("/api/tags", tagsRouter);
 app.use("/api/register", usersRouter);

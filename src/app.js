@@ -1,6 +1,4 @@
 const express = require("express");
-const path = require("path");
-const favicon = require("serve-favicon");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -21,7 +19,7 @@ app.use(
 );
 app.use(helmet());
 app.use(cors());
-// app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+
 app.use("/api/user", inventoryRouter);
 app.use("/api/tags", tagsRouter);
 app.use("/api/register", usersRouter);

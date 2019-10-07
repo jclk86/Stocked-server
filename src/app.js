@@ -1,4 +1,6 @@
 const express = require("express");
+const path = require("path");
+const favicon = require("serve-favicon");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -12,6 +14,7 @@ const app = express();
 
 const morganOption = NODE_ENV === "production" ? "tiny" : "common";
 
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(
   morgan(morganOption, {
     skip: () => NODE_ENV === "test"

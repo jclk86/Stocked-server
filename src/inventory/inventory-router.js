@@ -48,12 +48,17 @@ inventoryRouter
           error: `Missing '${key}' in request body`
         });
       }
-    InventoryService.insertItem(req.app.get("db"), newItem).then(item => {
-      res
-        .status(201)
-        .location(req.originalUrl, `/${item.user_id}/inventory/${item.item_id}`)
-        .json(item);
-    });
+    InventoryService.insertItem(req.app.get("db"), newItem)
+      .then(item => {
+        res
+          .status(201)
+          .location(
+            req.originalUrl,
+            `/${item.user_id}/inventory/${item.item_id}`
+          )
+          .json(item);
+      })
+      .catch(next);
   });
 
 inventoryRouter

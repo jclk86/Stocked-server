@@ -111,7 +111,7 @@ inventoryRouter
     const numOfValues = Object.values(itemToUpdate).filter(Boolean).length;
 
     if (numOfValues === 0) {
-      return res.status(400).jsonp({
+      return res.status(400).json({
         error: {
           message: `Request body must contain either 'name,' 'quantity,' 'cost_per_unit,' 'unit,' 'tag'`
         }

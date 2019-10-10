@@ -84,8 +84,6 @@ inventoryRouter
   })
   .patch(bodyParser, (req, res, next) => {
     const {
-      item_id,
-      id,
       name,
       quantity,
       image_url,

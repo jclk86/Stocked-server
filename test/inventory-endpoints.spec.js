@@ -107,7 +107,7 @@ describe(`Inventory Endpoints`, function() {
         desc: "test desc"
       };
       return supertest(app)
-        .post("/api/user/${testUser.id}/inventory")
+        .post(`/api/user/${testUser.id}/inventory`)
         .set("Authorization", helpers.makeAuthHeader(testUser))
         .send(newItem)
         .expect(201)

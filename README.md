@@ -2,7 +2,7 @@
 
 A quick and easy supply tracking app that lets users add, edit, delete inventory items
 
-Live link: https://stocked-client.jclk86.now.sh
+Live link: https://stocked-client-end.vercel.app/
 
 ## Login
 
